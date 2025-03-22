@@ -1,8 +1,8 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { ethers } from 'ethers';
-import SimplifiedSpendingRegistry from '../../../artifacts/contracts/SimplifiedSpendingRegistry.sol/SimplifiedSpendingRegistry.json';
+"use client";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { ethers } from "ethers";
+import SimplifiedSpendingRegistry from "../../../artifacts/contracts/SimplifiedSpendingRegistry.sol/SimplifiedSpendingRegistry.json";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -14,7 +14,7 @@ export default function Dashboard() {
   useEffect(() => {
     const initContract = async () => {
       try {
-        if (typeof window.ethereum !== 'undefined') {
+        if (typeof window.ethereum !== "undefined") {
           const provider = new ethers.BrowserProvider(window.ethereum);
           const signer = await provider.getSigner();
           const contractAddress = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512"; // Your deployed contract address
@@ -24,14 +24,18 @@ export default function Dashboard() {
             signer
           );
           setContract(contract);
-          
+
           // Get entity details
           const address = await signer.getAddress();
           const details = await contract.getEntityDetails(address);
           setEntityDetails(details);
-          
+
           // Get spending records
-          const records = await contract.getEntitySpendingRecords(address, 0, 5);
+          const records = await contract.getEntitySpendingRecords(
+            address,
+            0,
+            5
+          );
           setSpendingRecords(records);
         }
       } catch (error) {
@@ -59,9 +63,11 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Government Funds Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Government Funds Dashboard
+          </h1>
           <button
-            onClick={() => router.push('/')}
+            onClick={() => router.push("/")}
             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
           >
             Back to Home
@@ -79,13 +85,19 @@ export default function Dashboard() {
               </div>
               <div>
                 <p className="text-gray-600">Status</p>
-                <p className={`font-medium ${entityDetails[1] ? 'text-green-600' : 'text-red-600'}`}>
-                  {entityDetails[1] ? 'Active' : 'Inactive'}
+                <p
+                  className={`font-medium ${
+                    entityDetails[1] ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {entityDetails[1] ? "Active" : "Inactive"}
                 </p>
               </div>
               <div>
                 <p className="text-gray-600">Balance</p>
-                <p className="font-medium">{ethers.formatEther(entityDetails[2])} ETH</p>
+                <p className="font-medium">
+                  {ethers.formatEther(entityDetails[2])} ETH
+                </p>
               </div>
             </div>
           </div>
@@ -93,25 +105,43 @@ export default function Dashboard() {
 
         {/* Recent Spending Records */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Recent Spending Records</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            Recent Spending Records
+          </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full">
               <thead>
                 <tr className="bg-gray-50">
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Purpose</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    ID
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Purpose
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Amount
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Date
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {spendingRecords.map((record) => (
                   <tr key={record.id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{record.id.toString()}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{record.purpose}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{ethers.formatEther(record.amount)} ETH</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {new Date(record.timestamp * 1000).toLocaleDateString()}
+                      {record.id.toString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {record.purpose}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {ethers.formatEther(record.amount)} ETH
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {new Date(
+                        record.timestamp.toNumber() * 1000
+                      ).toLocaleDateString()}
                     </td>
                   </tr>
                 ))}
@@ -122,4 +152,4 @@ export default function Dashboard() {
       </div>
     </div>
   );
-} 
+}

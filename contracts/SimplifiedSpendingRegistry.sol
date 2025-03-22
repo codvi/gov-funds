@@ -6,7 +6,7 @@ contract SimplifiedSpendingRegistry {
         string name;
         bool isActive;
         uint256 balance;
-        uint256 needToSpend;  // New field to track funds that need to be spent
+        uint256 needToSpend;  
         uint256 happinessRating;
         uint256 totalVotes;
         uint256 lastVoteTimestamp;
